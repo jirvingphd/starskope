@@ -8,7 +8,7 @@ __pycache__
 *.tfevents
 *.zip
 *.fits
-*.csv
+# *.csv
 images/*
 .learn
 Icon?

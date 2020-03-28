@@ -1,15 +1,66 @@
+# PLAN OF ATTACK
 
+I. Develop Baseline Model [RNN_LSTM]
+
+0. IMPORT DATA
+	a) Plot galactic coordinates maps of campaigns/fields of view
+	b) Select K2 campaigns via MAST API
+		i. Observations sourced fromc TOIs/KOIs from Campaigns 0(E2), 1, 2, 3, 12
+
+1. INPUT LAYER
+
+		a) Fourier Transformed Photometric Timeseries
+			* Spectographs
+		b) Phase-Folded Data-Validated Light Curves
+		c) Target Pixel File 11x11 pixel grids
+	?	d) Further calculations e.g. Stellar Parameters, Radial Velocity, etc?
+
+2. HIDDEN LAYER
+
+
+3. OUTPUT LAYER
+
+
+II. Develop Final Model [Restricted_Boltzmann_Machines]
+
+> KEPLER + TESS + HST
+	- FFIs
+		- MOSAICS 
+			- WCS alignment -> API Queries to AWS (AstroQuery)
+			- DrizzlePac : Create Mosaics
+
+		> Computer Vision
+			> RBMs
+
+import numpy as np
+
+from bokeh.io import output_file, show
+from bokeh.plotting import figure
+from bokeh.util.hex import axial_to_cartesian
+
+output_file("hex_coords.html")
+
+q = np.array([0,  0, 0, -1, -1,  1, 1])
+r = np.array([0, -1, 1,  0,  1, -1, 0])
+
+p = figure(plot_width=400, plot_height=400, toolbar_location=None)
+p.grid.visible = False
+
+p.hex_tile(q, r, size=1, fill_color=["firebrick"]*3 + ["navy"]*4,
+           line_color="white", alpha=0.5)
+
+x, y = axial_to_cartesian(q, r, 1, "pointytop")
+
+p.text(x, y, text=["(%d, %d)" % (q,r) for (q, r) in zip(q, r)],
+       text_baseline="middle", text_align="center")
+
+show(p)
 
 # TODO
 
-FIRST: What is the best way to classify exoplanetary signals?
-SECOND: Can it be done accurately and reliably using only one type of data? EG timeseries-flux or 1D lightcurve analysis?
-THIRD: how much more accurate/reliable would our algorithm be if:
-1) training data includes both "LEFT-BRAIN" and "RIGHT-BRAIN" modes of thinking;
-2) training data includes information that requires analytical processing using both patterns of thought, 
-but each input is a meshed layering into one projected image.
-
-For now, we must first take care of the basics and begin working with the most barebones, minimal dataset we can find: the Kepler labeled Time Series data found on Kaggle. 
+if:
+1)INPUTS include both "LEFT-BRAIN" and "RIGHT-BRAIN" modes of thinking;
+2) each input is a meshed layering into one projected image.
 
 	* signals with exoplanetary origin are dwarfed by signals from false positives
 	due to artificial noise sources (e.g. systematic errors not removed by detrending), 
@@ -120,3 +171,36 @@ compare to results from Ansdell's team's predictions and model accuracy (validat
 Plotting and EDA
  http://docs.astropy.org/en/stable/generated/examples/index.html
 
+
+
+
+
+BOKEH
+
+file:///Users/hakkeray/CODE/CAPSTONE/starskope/notebooks/hex_coords.html
+
+```
+import numpy as np
+
+from bokeh.io import output_file, show
+from bokeh.plotting import figure
+from bokeh.util.hex import axial_to_cartesian
+
+output_file("hex_coords.html")
+
+q = np.array([0,  0, 0, -1, -1,  1, 1])
+r = np.array([0, -1, 1,  0,  1, -1, 0])
+
+p = figure(plot_width=400, plot_height=400, toolbar_location=None)
+p.grid.visible = False
+
+p.hex_tile(q, r, size=1, fill_color=["firebrick"]*3 + ["navy"]*4,
+           line_color="white", alpha=0.5)
+
+x, y = axial_to_cartesian(q, r, 1, "pointytop")
+
+p.text(x, y, text=["(%d, %d)" % (q,r) for (q, r) in zip(q, r)],
+       text_baseline="middle", text_align="center")
+
+show(p)
+```
